@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Image handling &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="Fitting functions" href="fitfuncs.html" />
+    <link rel="prev" title="Odysseus development" href="development.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fitfuncs.html" title="Fitting functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Odysseus development"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="development.html"
+                                  title="previous chapter">Odysseus development</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fitfuncs.html"
+                                  title="next chapter">Fitting functions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/imageprocess.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-odysseus.imageprocess">
+<h1>Image handling<a class="headerlink" href="#module-odysseus.imageprocess" title="Permalink to this headline">¶</a></h1>
+<p>All I/O related code, i.e. loading and saving, images lives in the <tt class="xref docutils literal"><span class="pre">imageio</span></tt> module. The code for processing images lives in <tt class="xref docutils literal"><span class="pre">imageprocess</span></tt>. Some functionality is independent of the type of image, for example smoothing, thresholding and interpolation. Other functionality is specific to cold atom experiments, for example calculating optical density and transmission for absorption images.</p>
+<p>I/O functions for several image formats.</p>
+<p>The relevant formats are TIF, hdf5 and ascii. For ascii and binary numpy formats
+no separate functions are provided for saving an image. This is because saving
+in these formats requires just a single command:
+ascii: np.savetxt(&#8216;filename&#8217;, img)
+binary (.npy): np.save(&#8216;filename&#8217;, img)</p>
+<dl class="function">
+<dt id="odysseus.imageio.convert_xcamera_to_hdf5">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">convert_xcamera_to_hdf5</tt><big>(</big><em>imglist</em>, <em>ext='xraw'</em><big>)</big><a class="headerlink" href="#odysseus.imageio.convert_xcamera_to_hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert every file in imglist to an hdf5 file.</p>
+<p>The raw files are saved in the hdf5 file as
+<cite>root.rawframes.pwa</cite>, <cite>root.rawframes.pwoa</cite>, <cite>root.rawframes.df</cite>.
+Their dtype is uint16, which results in files of a third smaller than
+the xcamera text files.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>imglist: list of str, paths to .xraw0 files</li>
+<li>ext: str, the extension of the XCamera file. Normally xraw or xroi.</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.imgimport_intelligent">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">imgimport_intelligent</tt><big>(</big><em>img_name</em><big>)</big><a class="headerlink" href="#odysseus.imageio.imgimport_intelligent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens an image file containing one or more frames</p>
+<p>The number of frames in the image is automatically detected. If it is a
+single frame, it is assumed to be a transmission image. If there are three
+frames, the first one is assumed to be probe with atoms (pwa), the second
+one probe without atoms (pwoa) and the third one a dark field (df).
+For four frames, it is assumed to be (pwoa, pwa, df1, df2).
+For six frames, the first two are discarded (they are for clearing the
+CCD charge on the Coolsnap camera), three to six are (pwoa, pwa, df1, df2).</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img_name: string containing the full path to an image</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>img_array: 3D array, containing the three or four frames of the image,</dt>
+<dd><p class="first last">in the  order (pwa, pwoa, df, df2).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Notes</strong></p>
+<p>The datatype has to be set to float in Winview, otherwise there is a
+strange problem reading the frames; support for 16-bit tif files is
+lacking a bit in PIL. Note: when pil_lite is available this does work.</p>
+<p>The same support is lacking in MS .Net apparently, hence the weird check
+for 3-channel TIFFs. What happens here is that XCamera can output multipage
+8-bit RGB TIFFs. Each page is of shape (M,N,3), where the 8-bit color
+channels combine to output 24-bit B/W data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.import_rawframes">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">import_rawframes</tt><big>(</big><em>img_name</em><big>)</big><a class="headerlink" href="#odysseus.imageio.import_rawframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens an image file containing three frames</p>
+<p>The datatype has to be set to float in Winview, otherwise there is a
+strange problem reading the frames; support for 16-bit tif files is
+lacking a bit in PIL.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img_name: string containing the full path to an image</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img_array: 3D array, containing the three frames of the image</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.import_rawimage">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">import_rawimage</tt><big>(</big><em>img_name</em><big>)</big><a class="headerlink" href="#odysseus.imageio.import_rawimage" title="Permalink to this definition">¶</a></dt>
+<dd>Opens an image file and returns it as an array.</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.import_xcamera">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">import_xcamera</tt><big>(</big><em>img_name</em>, <em>ext='xraw'</em><big>)</big><a class="headerlink" href="#odysseus.imageio.import_xcamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the three .xraw files from XCamera</p>
+<p>It is assumed that the file with extension .xraw0 contains the probe
+with atoms (pwa), the one with extension .xraw1 the probe without atoms
+(pwoa), and the one with extension .xraw2 the dark field (df).</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>img_name: str, name of the image with or without extension</dt>
+<dd><p class="first last">(the extension is stripped and replaced by <cite>ext</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">ext: str, the extension of the XCamera file. Normally xraw or xroi.</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>raw_array: 3D array, containing the three raw frames (pwa, pwoa, df)</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.list_of_frames">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">list_of_frames</tt><big>(</big><em>img_name</em><big>)</big><a class="headerlink" href="#odysseus.imageio.list_of_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of frames for an image file.</p>
+<p>Details are as described in the imgimport_intelligent docstring.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.load_hdfimage">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">load_hdfimage</tt><big>(</big><em>fname</em>, <em>dirname=None</em>, <em>ext_replace=True</em><big>)</big><a class="headerlink" href="#odysseus.imageio.load_hdfimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an image from an hdf5 file</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>fname: str, filename of the file to save, optionally including</dt>
+<dd><p class="first last">the full path to the directory</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dirname: str, if not None, fname will be appended to dirname to</dt>
+<dd><p class="first last">obtain the full path of the file to save.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">ext_replace: bool, if True replaces the extension of fname with <cite>.h5</cite></p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>transimg: ndarray, the image data</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.save_hdfimage">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">save_hdfimage</tt><big>(</big><em>imgarray</em>, <em>fname</em>, <em>dirname=None</em><big>)</big><a class="headerlink" href="#odysseus.imageio.save_hdfimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an image to an hdf5 file</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>imgarray: ndarray, containing the image data. If the array is 2D,</dt>
+<dd><p class="first last">it is assumed that this is a single frame image. If it is
+3D, the frames will be saved as separate arrays:
+(&#8216;pwa&#8217;, &#8216;pwoa&#8217;, &#8216;df&#8217;), and if there is a fourth frame this
+is df2.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>fname: str, filename of the file to save, optionally including</dt>
+<dd><p class="first last">the full path to the directory</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dirname: str, if not None, fname will be appended to dirname to</dt>
+<dd><p class="first last">obtain the full path of the file to save.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageio.save_tifimage">
+<tt class="descclassname">odysseus.imageio.</tt><tt class="descname">save_tifimage</tt><big>(</big><em>imgarray</em>, <em>fname</em>, <em>dirname=None</em><big>)</big><a class="headerlink" href="#odysseus.imageio.save_tifimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a single image in TIF format</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">imgarray: 2D array, containing a single frame image</p>
+</li>
+<li><dl class="first docutils">
+<dt>fname: str, filename of the file to save, optionally including</dt>
+<dd><p class="first last">the full path to the directory</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>dirname: str, if not None, fname will be appended to dirname to</dt>
+<dd><p class="first last">obtain the full path of the file to save.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Notes</strong></p>
+<p>Multiple frame tif images are not supported. For such data hdf5 is the
+recommended format.</p>
+</dd></dl>
+
+<p>Image processing functions</p>
+<p>Some functionality is independent of the type of image, for example
+smoothing, thresholding and interpolation. Other functionality is specific
+to cold atom experiments, for example calculating optical density and
+transmission for absorption images.</p>
+<dl class="function">
+<dt id="odysseus.imageprocess.bilinear_interpolate">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">bilinear_interpolate</tt><big>(</big><em>xr</em>, <em>yr</em>, <em>img</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.bilinear_interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a bi-linear interpolation to get the value at image coordinates</p>
+<dl class="docutils">
+<dt><strong>Inputs</strong></dt>
+<dd><ul class="first last simple">
+<li>xr: array-like, the x-coordinates of the point to be interpolated</li>
+<li>yr: array-like, the y-coordinates of the point to be interpolated</li>
+<li>img: 2d-array, the image data</li>
+</ul>
+</dd>
+<dt><strong>Outputs</strong></dt>
+<dd><ul class="first last simple">
+<li>ans: array-like, the result of the interpolation</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.calc_absimage">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">calc_absimage</tt><big>(</big><em>raw_frames</em>, <em>norm_edge=False</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.calc_absimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the transmission image and optical density.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>raw_frames: 3D array, containing three or four images;</dt>
+<dd><p class="first last">probe with atoms (pwa), probe without atoms (pwoa),
+dark field (df) and <cite>optionally</cite> a second dark field (df2).
+If there is no second dark field, the same one is used
+twice.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>norm_edge: bool, if True, normalize to one using the edge (it is assumed</dt>
+<dd><p class="first last">no atoms are visible on the edge.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>transimg: 2d array containing the transmission image,</dt>
+<dd><p class="first last">defined as (pwa - df)/(pwoa - df2).</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">odimg: 2d array containing the optical density for each pixel</p>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.find_fitrange">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">find_fitrange</tt><big>(</big><em>od_prof</em>, <em>od_max=1</em>, <em>min_cutoff=8</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.find_fitrange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a suitable range of radii to use for fitting the image.</p>
+<p>When the optical density saturates at a certain range of radii, and then
+that data range is used for fitting, it throws off the fit. Therefore
+a cutoff value for the maximum optical density should be specified, and the
+fit only done for values of OD smaller than that. The data is smoothed,
+and the index for the radius where the OD drops below OD_max is determined.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>od_prof: 1D array, containing the radially averaged optical density</dt>
+<dd><p class="first last">profile.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>cutoff: int, the larger value of index of rcoord where od_prof&lt;od_max</dt>
+<dd><p class="first last">or min_cutoff.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">od_max: float, the maximum desired value of the optical density</p>
+</li>
+<li><dl class="first docutils">
+<dt>min_cutoff: int, the minimum value for the cutoff index. The reason to</dt>
+<dd><p class="first last">use this is that a radially averaged profile is very noisy
+around the center which may skew a fit.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.imgslice">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">imgslice</tt><big>(</big><em>img</em>, <em>cpoint</em>, <em>angle=0</em>, <em>width=None</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.imgslice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a line profile through the centerpoint</p>
+<dl class="docutils">
+<dt><strong>Inputs</strong></dt>
+<dd><ul class="first last simple">
+<li>img: 2D array, the image data</li>
+<li>cpoint: 1D array, the center point coordinates of the required slice</li>
+</ul>
+</dd>
+<dt><strong>Outputs</strong></dt>
+<dd><ul class="first last simple">
+<li>lprof_coord: 1D array, the slice indices in units of pixels</li>
+<li>lprof: 1D array, the slice data</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>angle: float, the angle under which the slice is taken in degrees</li>
+<li>width: float, the width over which the slice is averaged</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.lineprofiles">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">lineprofiles</tt><big>(</big><em>img</em>, <em>com</em>, <em>rcoord</em>, <em>phi</em>, <em>elliptic=None</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.lineprofiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate radial profiles around center of mass</p>
+<p>Line profiles without any averaging are generated. This is useful for
+comparing the radially averaged profile with, to make sure that that is a
+valid procedure.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">img: 2D array, normally containing image data</p>
+</li>
+<li><p class="first">com: 1D array with two elements, the center of mass coordinates in pixels</p>
+</li>
+<li><dl class="first docutils">
+<dt>rcoord: 1D array, radial coordinate for line profiles</dt>
+<dd><p class="first last">this is usually obtained from radial_interpolate</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">phi: 1D array, angles along which line profiles are required</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>rprofiles: 2D array, containing radial profiles along angles</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>elliptic: tuple, containing two elements. the first one is the
+ellipticity (or ratio of major and minor axes), the second one is the
+angle by which the major axis is rotated from the y-axis. This should
+be the same as used for radial averaging.</li>
+</ul>
+</blockquote>
+<p><strong>Notes</strong></p>
+<blockquote>
+The form used for mapping an ellipse to (x,y) coordinates is:
+x = acosphicoslpha - bsinphisinlpha
+y = bsinphicoslpha + acosphisinlpha</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.maxod_correct">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">maxod_correct</tt><big>(</big><em>odimg</em>, <em>odmax</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.maxod_correct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corrects calculated OD from an absorption image for finite OD_max</p>
+<p>This idea was taken from Brian DeMarco&#8217;s thesis, but it does not seem to
+make much of a difference at low OD. For high-OD images it causes errors
+because there will be data points with measured OD higher than the maximum
+observable OD due to noise in the image.</p>
+<p>It is left in here for completeness, but it is recommended to not use this
+method. Instead, images should be taken in a regime where this correction
+is negligibly small anyway (i.e. below an OD of 1.5).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.mirror_line">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">mirror_line</tt><big>(</big><em>linedata</em>, <em>negative_mirror=False</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.mirror_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirrors a 1D array around its first element</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">linedata: 1D array, the array to be mirrored</p>
+</li>
+<li><dl class="first docutils">
+<dt>negative_mirror: bool, if True the mirrors elements are multiplied by</dt>
+<dd><p class="first last">-1. This is useful to mirror the x-axis of a plot.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>mirrored: 1D array, the output array, which is now symmetric around its</dt>
+<dd><p class="first last">midpoint.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.normalize_edgestrip">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">normalize_edgestrip</tt><big>(</big><em>img</em>, <em>normval=1.0</em>, <em>striplen=5</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.normalize_edgestrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes the image so the average value on the edges is normval.</p>
+<p>This is simply a multiplication of the whole image array by a number
+so that the average intensity on the edges of the image is <cite>normval</cite>.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img: 2D array, image data</li>
+<li>normval: float, the value to which img is normalized</li>
+<li>striplen: int, number of pixels along each edge used for normalization</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>normimg: 2D array, the normalized image</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.normalize_img">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">normalize_img</tt><big>(</big><em>img</em>, <em>com</em>, <em>size</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.normalize_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask off the atoms, then fit linear slopes to the image and normalize</p>
+<p>We assume that there are no atoms left outside 1.5 times the size. This
+seems to be a reasonable assumption, it does not influence the result of
+the normalization.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img: 2D array, containing the image</li>
+<li>com: tuple, center of mass coordinates</li>
+<li>size: float, radial size of the cloud</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>normimg: 2D array, the normalized image</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.od2trans">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">od2trans</tt><big>(</big><em>odimg</em>, <em>maxod=3.5</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.od2trans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the transmission image from an optical density image</p>
+<p>For pixels with strange values due to noise, replace the value of that pixel
+by the maximum OD that can be experimentally measured.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.radial_interpolate">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">radial_interpolate</tt><big>(</big><em>img</em>, <em>com</em>, <em>dr</em>, <em>phi=None</em>, <em>elliptic=None</em>, <em>full_output=False</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.radial_interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does radial averaging around the center of mass of the image.</p>
+<p>Radial averaging of the image data on circles spaced by dr around the
+center of mass. The number of points on each circle is dphi*sqrt(i+1),
+with i the circle index. A bilinear interpolation method is used.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">img: 2D array, normally containing image data</p>
+</li>
+<li><dl class="first docutils">
+<dt>com: 1D array with two elements, the center of mass coordinates in</dt>
+<dd><p class="first last">pixels</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">dr: radial step size in pixels</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>rcoord: 1D array containing the radial coordinate</li>
+<li>rad_profile: 1D array containing the averaged profile</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>phi: 1D array, the angles along which line profiles are taken. More</dt>
+<dd><p class="first last">values in phi means a more precise radial average; default is
+2*pi times the maximum radius in pixels</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">elliptic: tuple, containing two elements. the first one is the
+ellipticity (or ratio of major and minor axes), the second one is the
+angle by which the major axis is rotated from the y-axis.</p>
+</li>
+<li><p class="first">full_output: bool, selects whether rprofiles and phi are returned</p>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.radialprofile_errors">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">radialprofile_errors</tt><big>(</big><em>odprofiles</em>, <em>angles</em>, <em>od_prof</em>, <em>od_cutoff</em>, <em>showfig=False</em>, <em>savefig_name=None</em>, <em>report=True</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.radialprofile_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate errors in radial profiles as a function of angle</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">odprofiles: 2D array, containing radial OD profiles along angles</p>
+</li>
+<li><dl class="first docutils">
+<dt>angles: 1D array, angles at which radial profiles are taken</dt>
+<dd><p class="first last">(zero is postive x-axis)</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">od_prof: 1D array, radially averaged optical density</p>
+</li>
+<li><p class="first">od_cutoff: integer, index of profiles at which maximum fit-OD is reached</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>av_err: float, sum of absolute values of errors in errsum</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>showfig: bool, determines if a figure is shown with density profile</dt>
+<dd><p class="first last">and fit</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">report: bool, if True print the sums of the mean and rms errors</p>
+</li>
+<li><dl class="first docutils">
+<dt>savefig_name: string, if not None and showfig is True, the figure is</dt>
+<dd><p class="first last">not shown but saved as png with this string as filename.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.smooth">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">smooth</tt><big>(</big><em>x</em>, <em>window_len=10</em>, <em>window='hanning'</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth the data using a window with requested size.</p>
+<p>This method is based on the convolution of a scaled window with the signal.
+The signal is prepared by introducing reflected copies of the signal
+(with the window size) in both ends so that transient parts are minimized
+in the begining and end part of the output signal.</p>
+<p>Adapted from the Scipy Cookbook by Ralf Gommers.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>x: 1D array, data that needs to be smoothed</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>x_smooth: 1D array, the smoothed signal</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">window_len: int, the size of the smoothing window</p>
+</li>
+<li><dl class="first docutils">
+<dt>window: str, the type of window from &#8216;flat&#8217;, &#8216;hanning&#8217;, &#8216;hamming&#8217;,</dt>
+<dd><p class="first last">&#8216;bartlett&#8217;, &#8216;blackman&#8217;. A flat window will produce a
+moving average smoothing.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.threshold_image">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">threshold_image</tt><big>(</big><em>img</em>, <em>thres=0.5</em>, <em>below=True</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.threshold_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a binary array (ones and zeros) depending on pixel values.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">img: array, containing an image (also works for non-image data)</p>
+</li>
+<li><p class="first">thres: scalar value, the threshold value</p>
+</li>
+<li><dl class="first docutils">
+<dt>below: boolean value, True means that each element of img that is below</dt>
+<dd><p class="first last">thres gives a 1 in the thresholded image, and each element that
+is above it a 0.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>thres_img: array, containing ones and zeros as a result of</dt>
+<dd><p class="first last">thresholding the input array.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.imageprocess.trans2od">
+<tt class="descclassname">odysseus.imageprocess.</tt><tt class="descname">trans2od</tt><big>(</big><em>transimg</em>, <em>maxod=3.5</em><big>)</big><a class="headerlink" href="#odysseus.imageprocess.trans2od" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the optical density image from a transmission image</p>
+<p>For pixels with strange values due to noise, replace the value of that pixel
+by the maximum OD that can be experimentally measured.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitfuncs.html" title="Fitting functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Odysseus development"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

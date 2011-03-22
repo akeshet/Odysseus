@@ -1,0 +1,9 @@
+[Core]
+Name = Spin balance
+Module = spinbalance_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A plugin that shows two absorption images and calculates the balance of number of atoms in these images.

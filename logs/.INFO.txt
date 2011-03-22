@@ -1,0 +1,1 @@
+This directory (logs) is used by the Odysseus GUI to write html files containing tracebacks if an exception occurs. 

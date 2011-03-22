@@ -1,0 +1,9 @@
+[Core]
+Name = Fit check report
+Module = texreport_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A plugin that runs several tests on the temperature fit and compiles a pdf report.

@@ -1,0 +1,9 @@
+[Core]
+Name = Launch IPython
+Module = launch_ipython_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A plugin that launches IPython in a new window and loads the image data into it.

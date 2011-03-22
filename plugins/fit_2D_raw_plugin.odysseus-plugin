@@ -1,0 +1,9 @@
+[Core]
+Name = raw 2D angled fit 
+Module = fitraw_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = Fits the raw probe without atoms instead of the OD

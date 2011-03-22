@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Theory &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="User interface" href="fitfermions.html" />
+    <link rel="prev" title="The Graphical User Interface" href="gui.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fitfermions.html" title="User interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="The Graphical User Interface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Theory</a><ul>
+<li><a class="reference external" href="#temperature-fitting-dos-and-don-ts">Temperature fitting - dos and don&#8217;ts</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="gui.html"
+                                  title="previous chapter">The Graphical User Interface</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fitfermions.html"
+                                  title="next chapter">User interface</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/theory.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="theory">
+<h1>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h1>
+<p>The fitting procedure to extract the temperature from only the shape of the cloud seems to be most sensitive for temperatures between T/T_F = 0.05 and T/T_F = 0.4. For higher T/T_F the cloud starts to resemble a Gaussian and for lower T/T_F the differences become small because a smaller fraction of the atoms contributes to deviations in shape. In the figure below we can see the relative changes in shape for curves with different T/T_F fitted to the same image.</p>
+<a class="reference external image-reference" href="_images/fit_several_temperatures.png"><img alt="_images/fit_several_temperatures.png" src="_images/fit_several_temperatures.png" style="width: 500pt;" /></a>
+<div class="section" id="temperature-fitting-dos-and-don-ts">
+<h2>Temperature fitting - dos and don&#8217;ts<a class="headerlink" href="#temperature-fitting-dos-and-don-ts" title="Permalink to this headline">¶</a></h2>
+<p>There are some things to keep in mind when you want a reliable temperature fit. First of all, it is very important that the image is as clean as possible (few fringes). This can be achieved by cleaning optical surfaces, by aperturing the imaging beam to limit backreflections, by angling optical surfaces, and by using a short optical path length after the imaging fiber.</p>
+<p>Other things that can be done are:</p>
+<ul class="simple">
+<li>use a ROI with size at least two or three times the cloud size (otherwise we get normalization errors, or cut off significant parts of the data)</li>
+<li>for a ROI, stay away from regions with no light and image edge by at least 10 pixels</li>
+<li>use images with a central OD between ~ 0.6 and 1.6</li>
+<li>results are not sensitive to TOF or cutoff OD when the above is done (check!)</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitfermions.html" title="User interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="The Graphical User Interface"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

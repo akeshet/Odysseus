@@ -1,0 +1,9 @@
+[Core]
+Name = Fourier transform image
+Module = fourier_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A simple plugin that Fourier transforms an image

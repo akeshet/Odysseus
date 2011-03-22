@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="The Graphical User Interface" href="gui.html" />
+    <link rel="prev" title="Overview" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="The Graphical User Interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Introduction</a><ul>
+<li><a class="reference external" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference external" href="#the-gui">The GUI</a></li>
+<li><a class="reference external" href="#writing-analysis-scripts">Writing analysis scripts</a></li>
+<li><a class="reference external" href="#fitting-an-image">Fitting an image</a></li>
+<li><a class="reference external" href="#the-structure-of-odysseus">The structure of Odysseus</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Overview</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="gui.html"
+                                  title="next chapter">The Graphical User Interface</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/introduction.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Odysseus consists of a library of functions for analyzing data from cold-atom experiments and a graphical user interface (GUI) to these functions. In this section we will discuss what is needed to get Odysseus working, and the basics of using the GUI and library.</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Odysseus is written in <a class="reference external" href="http://python.org">Python</a> and requires a few Python libraries to run. The most important ones are <a class="reference external" href="http://scipy.org/NumPy">Numpy</a> (for fast numerics), <a class="reference external" href="http://scipy.org/">Scipy</a> (for fitting routines etc) and <a class="reference external" href="http://matplotlib.sourceforge.net/">Matplotlib</a> (for plotting). On Windows, a fully functional environment can be obtained simply by installing the <a class="reference external" href="http://enthought.com/products/epd.php">Enthought Python Distribution</a> and <a class="reference external" href="http://www.riverbankcomputing.co.uk/software/pyqt/download">PyQt4</a>. <a class="reference external" href="http://www.sagemath.org/">Sage</a> should work as well, but this has not yet been tested. On Linux, all libraries can be installed through the package manager on the most common distributions. This is all free software, so no license headaches.</p>
+</div>
+<div class="section" id="the-gui">
+<h2>The GUI<a class="headerlink" href="#the-gui" title="Permalink to this headline">¶</a></h2>
+<p>The GUI is straightforward to use, and allows new users to fit data with a number of functions without writing and scripts. It is also very useful to view images the moment they are acquired during an experimental run, and do some immediate analysis. The GUI is displayed below. For a detailed description of the functionality see the <a class="reference external" href="gui.html#section-gui"><em>section on the GUI</em></a>.</p>
+<a class="reference external image-reference" href="_images/odysseusgui.png"><img alt="_images/odysseusgui.png" src="_images/odysseusgui.png" style="width: 500pt;" /></a>
+</div>
+<div class="section" id="writing-analysis-scripts">
+<h2>Writing analysis scripts<a class="headerlink" href="#writing-analysis-scripts" title="Permalink to this headline">¶</a></h2>
+<p>The most efficient way of using Odysseus for analyzing a larger number of files is to write small scripts, that define the images you want to fit, and then to run these scripts from the command line. Standard Python works fine, but nicer is to use the <a class="reference external" href="http://ipython.scipy.org/moin/">IPython</a> interpreter. IPython and a nice editor of your choice can be used in the same way as you would use Matlab for interactive data analysis. A typical interactive session looks like this:</p>
+<a class="reference external image-reference" href="_images/interactive_python.jpg"><img alt="_images/interactive_python.jpg" src="_images/interactive_python.jpg" style="width: 500pt;" /></a>
+<p>In order to be able to run data analysis scripts from any directory, it is essential that the Python interpreter knows where to find the Odysseus modules. This requires setting the environment variable PYTHONPATH to include the Odysseus directory. For Windows XP this can be done via <em>My Computer &gt; Properties &gt; Advanced (tab) &gt; Environment Variables</em> and on Linux by defining PYTHONPATH in a shell startup rc file (.bashrc for example). To make sure this worked you can type <tt class="docutils literal"><span class="pre">echo</span> <span class="pre">$PYTHONPATH</span></tt> in a terminal.</p>
+</div>
+<div class="section" id="fitting-an-image">
+<h2>Fitting an image<a class="headerlink" href="#fitting-an-image" title="Permalink to this headline">¶</a></h2>
+<p>Once everything is set up we can test if it all works. To do this we need the example script below and an image. Both can be found in the Odysseus source directory.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">os</span>
+<span class="k">from</span> <span class="nn">odysseus.fitfermions</span> <span class="k">import</span> <span class="n">fit_img</span>
+
+<span class="c">#dirname = &#39;../../../archives/2008-05-27/&#39;</span>
+<span class="n">dirname</span> <span class="o">=</span> <span class="s">&#39;c:</span><span class="se">\\</span><span class="s">Data</span><span class="se">\\</span><span class="s">2008-05-27&#39;</span>
+
+<span class="c">## this is how to fit a single image ##</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="s">&#39;6msTOF.TIF&#39;</span>
+<span class="n">img_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+<span class="n">fit_img</span><span class="p">(</span><span class="n">img_name</span><span class="p">,</span> <span class="n">odmax</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">showfig</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Open a terminal, go to the Odysseus source directory and start ipython there (simply type &#8220;ipython -pylab&#8221; at the promt and press enter. Then run the script by typing &#8220;run example_fit.py&#8221;.</p>
+</div>
+<div class="section" id="the-structure-of-odysseus">
+<h2>The structure of Odysseus<a class="headerlink" href="#the-structure-of-odysseus" title="Permalink to this headline">¶</a></h2>
+<p>Here is a visual representation of the structure of the code. Higher levels depend on lower levels but not the other way around, i.e. blue modules have no dependencies on other Odysseus code.</p>
+<a class="reference external image-reference" href="_images/dependency_graph.png"><img alt="_images/dependency_graph.png" src="_images/dependency_graph.png" style="width: 500pt;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gui.html" title="The Graphical User Interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Overview"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

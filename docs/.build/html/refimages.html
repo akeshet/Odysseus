@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generation of reference images &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="The GUI plugin system" href="plugins.html" />
+    <link rel="prev" title="User interface" href="fitfermions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="plugins.html" title="The GUI plugin system"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fitfermions.html" title="User interface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Generation of reference images</a><ul>
+<li><a class="reference external" href="#adding-noise">Adding noise</a></li>
+<li><a class="reference external" href="#effects-of-noise-on-fit-results">Effects of noise on fit results</a></li>
+<li><a class="reference external" href="#validity-of-radial-averaging">Validity of radial averaging</a></li>
+<li><a class="reference external" href="#elliptical-averaging">Elliptical averaging</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fitfermions.html"
+                                  title="previous chapter">User interface</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="plugins.html"
+                                  title="next chapter">The GUI plugin system</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/refimages.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="generation-of-reference-images">
+<span id="module-odysseus.refimages"></span><h1>Generation of reference images<a class="headerlink" href="#generation-of-reference-images" title="Permalink to this headline">¶</a></h1>
+<p>We are interested in generating reference images from analytical expressions for the density distribution of atoms in a trap or in time-of-flight (TOF), in order to test our fit routines, get an idea of the effect of various types of noise, and to see for what experimental parameters we get useful data. We can generate transmission images, <em>i.e. the same type of images we get from our experiment</em>, from either the fugacity, radial size and TOF or from T/T_F, number of atoms and TOF.</p>
+<p>To create an image we can do for example:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3
+4
+5</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">odysseus.refimages</span> <span class="k">as</span> <span class="nn">refimg</span>
+
+<span class="c"># T/T_F = 0.1, N = 5e6, TOF = 3 ms</span>
+<span class="n">central_od</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">bprime</span> <span class="o">=</span> <span class="n">refimg</span><span class="o">.</span><span class="n">idealfermi_fitparams</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">5e6</span><span class="p">,</span> <span class="n">tof</span><span class="o">=</span><span class="mf">3e-3</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">refimg</span><span class="o">.</span><span class="n">generate_image</span><span class="p">(</span><span class="n">ODmax</span><span class="o">=</span><span class="n">central_od</span><span class="p">,</span> <span class="n">fugacity</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">cloudradius</span><span class="o">=</span><span class="n">bprime</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>And then to plot the image:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3
+4
+5
+6</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">pylab</span>
+
+<span class="n">fig1</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mf">111</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">pylab</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.35</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>This should give the following result:</p>
+<a class="reference external image-reference" href="_images/refimg.png"><img alt="_images/refimg.png" src="_images/refimg.png" style="width: 400pt;" /></a>
+<div class="section" id="adding-noise">
+<h2>Adding noise<a class="headerlink" href="#adding-noise" title="Permalink to this headline">¶</a></h2>
+<p>We can add various types of noise to an image with the <tt class="docutils literal"><span class="pre">add_noise</span></tt> function:</p>
+<dl class="function">
+<dt id="odysseus.refimages.add_noise">
+<tt class="descclassname">odysseus.refimages.</tt><tt class="descname">add_noise</tt><big>(</big><em>img</em>, <em>ampl=0.050000000000000003</em>, <em>noisetype='random'</em>, <em>fringeargs=None</em><big>)</big><a class="headerlink" href="#odysseus.refimages.add_noise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Noise is added to an image.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img: 2d array, containing image data</li>
+<li>ampl: float, amplitude of the noise</li>
+<li>noisetype: string, value can be one of<ul>
+<li>&#8216;random&#8217;, adds unbiased white noise</li>
+<li>&#8216;linear_x&#8217;, adds a linear gradient along x from 0 to ampl</li>
+<li>&#8216;linear_y&#8217;, adds a linear gradient along y from 0 to ampl</li>
+<li>&#8216;fringes&#8217;, adds fringes with parameters fringeargs</li>
+</ul>
+</li>
+<li>fringeargs: sequence, containing four values<ul>
+<li>angle: float, angle of fringes in radians with respect to the x-axis</li>
+<li>freq: float, frequency of the fringes in pixels^{-1}</li>
+<li>pos: tuple, central position of the fringes with respect to the CoM</li>
+<li>size: float, size of the Gaussian envelope of the fringes</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>img: 2d array, the input image with noise added to it</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<p>To generate random noise plus fringes we can for example do:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre>1
+2
+3</pre></td><td class="code"><div class="highlight"><pre><span class="n">fringeargs</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="p">(</span><span class="mf">60</span><span class="p">,</span> <span class="mf">50</span><span class="p">),</span> <span class="mf">70</span><span class="p">)</span>
+<span class="n">img2</span> <span class="o">=</span> <span class="n">add_noise</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">ampl</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noisetype</span><span class="o">=</span><span class="s">&#39;fringes&#39;</span><span class="p">,</span> <span class="n">fringeargs</span><span class="o">=</span><span class="n">fringeargs</span><span class="p">)</span>
+<span class="n">img2</span> <span class="o">=</span> <span class="n">add_noise</span><span class="p">(</span><span class="n">img2</span><span class="p">,</span> <span class="n">ampl</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">noisetype</span><span class="o">=</span><span class="s">&#39;random&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>This should give the following result:</p>
+<a class="reference external image-reference" href="_images/noisy_image.png"><img alt="_images/noisy_image.png" src="_images/noisy_image.png" style="width: 400pt;" /></a>
+</div>
+<div class="section" id="effects-of-noise-on-fit-results">
+<h2>Effects of noise on fit results<a class="headerlink" href="#effects-of-noise-on-fit-results" title="Permalink to this headline">¶</a></h2>
+<p>It turns out that the fit results are quite sensitive to errors in normalization. A few percent one way or another in the tail of the radially averaged density profile can mimic the effect of quantum degeneracy or make it look like a very hot cloud. Ideally we want to make sure the density profile is really zero at the edge, and then normalize after radial averaging. When we have non-uniform normalization noise over the ccd then it becomes a tough problem of course.</p>
+<p>Uniform white noise added to the transmission image does not seem to be that much of a problem, unless the amplitude becomes large (&gt;5%). The main effect is to reduce the optical density in the center of the cloud (if OD &gt; 1.5), but this part of the density profile is not usually taken into account when fitting.</p>
+</div>
+<div class="section" id="validity-of-radial-averaging">
+<span id="radialaveraging-label"></span><h2>Validity of radial averaging<a class="headerlink" href="#validity-of-radial-averaging" title="Permalink to this headline">¶</a></h2>
+<p>We do the radial averaging by first finding the center of mass (CoM), then drawing circles around it, picking points on these circles and then determining the value of the image at each of those points by a bi-linear interpolation on the four pixels surrounding them. This procedure can be invalidated by either noise in the image or by the cloud not actually being radially symmetric. The latter can for example be caused by stray magnetic fields that influence the expansion out of an optical trap.</p>
+<p>The purpose of the <tt class="xref docutils literal"><span class="pre">lineprofiles()</span></tt> function is to generate radial line profiles and compare those with the radially averaged profile we use for fitting. It can generate plots for the sum of differences between raw and averaged data as a function of angle, as shown below for a generated image with only random noise.</p>
+<a class="reference external image-reference" href="_images/raderror_randomnoise.png"><img alt="_images/raderror_randomnoise.png" src="_images/raderror_randomnoise.png" style="width: 400pt;" /></a>
+<p>The black data points represent negative sums, the white ones positive sums. There seem to be no systematics in the error sums, therefore we can conclude that radial averaging is a valid procedure for this image.</p>
+<p>We can check the error sums for generated images with various types of noise, such as random noise, linear background slopes, fringes and combinations of all these. We find that without normalization with <tt class="xref docutils literal"><span class="pre">normalize_img()</span></tt> the background slopes invalidate the radial averaging. With normalization we only have a problem when there are fringes that overlap with the atoms. This means it is important to clean up the imaging beam profile and use an aperture to select only the useful part of the beam.</p>
+<p>Result for image with random noise, linear slopes and strong fringes partly overlapping the atoms:</p>
+<a class="reference external image-reference" href="_images/raderror_allkindsofnoise.png"><img alt="_images/raderror_allkindsofnoise.png" src="_images/raderror_allkindsofnoise.png" style="width: 400pt;" /></a>
+</div>
+<div class="section" id="elliptical-averaging">
+<h2>Elliptical averaging<a class="headerlink" href="#elliptical-averaging" title="Permalink to this headline">¶</a></h2>
+<p>It turns out that at low temperatures and magnetic fields of around 560 G, the expansion of the atom cloud is slow enough that we can observe an asymmetry between the horizontal and vertical directions in the image. This is due to imperfections in the coils and to gravity, and leads to faster expansion in the vertical than in the horizontal direction. Therefore we need to average elliptically instead of radially. We can do this by specifying the <tt class="docutils literal"><span class="pre">elliptic</span></tt> parameter in <tt class="xref docutils literal"><span class="pre">fit_img()</span></tt> or <tt class="xref docutils literal"><span class="pre">radial_interpolate()</span></tt>. This has to be a tuple with two elements, the first gives the ellipticity (or aspect ratio) and the second the angle of the axes of the ellipse with respect to the image axes. The plots of residuals of radial profiles, as above, let us then determine the ellipticity with an accuracy of about 1%.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plugins.html" title="The GUI plugin system"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fitfermions.html" title="User interface"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

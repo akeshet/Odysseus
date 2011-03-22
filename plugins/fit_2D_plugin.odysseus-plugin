@@ -1,0 +1,9 @@
+[Core]
+Name = 2D TF fit
+Module = fit_2D_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A simple plugin that does a 2-D TF fit of an image.

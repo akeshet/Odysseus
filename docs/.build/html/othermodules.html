@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Other modules &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="prev" title="Fitting functions" href="fitfuncs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fitfuncs.html" title="Fitting functions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Other modules</a><ul>
+<li><a class="reference external" href="#module-odysseus.filetools">filetools</a></li>
+<li><a class="reference external" href="#module-odysseus.polylog">polylog</a></li>
+<li><a class="reference external" href="#lerch">lerch</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="fitfuncs.html"
+                                  title="previous chapter">Fitting functions</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/othermodules.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="other-modules">
+<h1>Other modules<a class="headerlink" href="#other-modules" title="Permalink to this headline">¶</a></h1>
+<p>The smaller modules that are part of Odysseus and do not warrant a more extensive description (yet) are documented in this section.</p>
+<div class="section" id="module-odysseus.filetools">
+<h2>filetools<a class="headerlink" href="#module-odysseus.filetools" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a few convenience functions to work with the file system. String handling and interaction with the operating system is easy to do in Python, and processing directories of files (or selections out of them) can be done with the help of this module.</p>
+<p>Functions to easily process file names.</p>
+<dl class="function">
+<dt id="odysseus.filetools.find_imgnames">
+<tt class="descclassname">odysseus.filetools.</tt><tt class="descname">find_imgnames</tt><big>(</big><em>imglist</em>, <em>startstr</em>, <em>stopstr</em><big>)</big><a class="headerlink" href="#odysseus.filetools.find_imgnames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds names from imglist between startstr and stopstr in time-ordered way</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">imglist: list of str, containing paths of images on disc</p>
+</li>
+<li><dl class="first docutils">
+<dt>startstr: str, part of the name of the oldest image by date that is</dt>
+<dd><p class="first last">wanted</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>stopstr: str, part of the name of the newest image by date that is</dt>
+<dd><p class="first last">wanted</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>imgs: list of str, containing the found paths to image files</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.filetools.get_files_in_dir">
+<tt class="descclassname">odysseus.filetools.</tt><tt class="descname">get_files_in_dir</tt><big>(</big><em>dirname</em>, <em>ext='TIF'</em>, <em>globexpr=None</em>, <em>sort=True</em><big>)</big><a class="headerlink" href="#odysseus.filetools.get_files_in_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all files in a directory with extension ext</p>
+<p>When <tt class="docutils literal"><span class="pre">globexpr</span></tt> is given, <tt class="docutils literal"><span class="pre">ext</span></tt> is ignored and the Python glob module
+is used to search for all files with the given pattern.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>dirname: string, full path to the directory</li>
+<li>ext: string, extension of the files to process</li>
+<li>globexpr: string, glob search expression (can contain wildcards)</li>
+<li>sort: bool, if True the results are sorted by file date/time, newest
+first</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>imgs: list of strings, each string in the list is the complete path to
+a file</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.filetools.sort_files_by_date">
+<tt class="descclassname">odysseus.filetools.</tt><tt class="descname">sort_files_by_date</tt><big>(</big><em>filelist</em>, <em>newestfirst=True</em><big>)</big><a class="headerlink" href="#odysseus.filetools.sort_files_by_date" title="Permalink to this definition">¶</a></dt>
+<dd>Return a list of files sorted by time, newest first by default</dd></dl>
+
+</div>
+<div class="section" id="module-odysseus.polylog">
+<h2>polylog<a class="headerlink" href="#module-odysseus.polylog" title="Permalink to this headline">¶</a></h2>
+<p>Polylog contains approximate algorithms for the polylog functions Li_2, Li_{5/2} and Li_3, as well as their bosonic equivalents. They were originally written by Martin Zwierlein for the Igor data analysis software.</p>
+<p>Functions that approach several polylogarithms by polynomials.</p>
+<p>Precision is on the order of 1e-7 or better. For working with fermions, the
+polylog functions Li(x) are usually used in the form -Li(-exp(x)). We therefore
+define functions fermi_poly as:
+fermi_poly_s(x) <img class="math" src="_images/math/dd376a9767ccebeb718fd4465d26ba1cf3bcb0a8.png" alt="=-Li_s(-e^x)"/>,
+with <img class="math" src="_images/math/7c35779f87488e4db3ea48e714b3f0516e57f1a3.png" alt="Li_s(z)=\sum_{k=1}^{\infty}\frac{z^k}{k^s}"/>.
+This is useful if you are only dealing with Fermi statistics. For working with
+bose statistics we define g-functions in a similar way.</p>
+<p>There is a more accurate and general algorithm in lerch.py for Li_s(x),
+that works for all s&gt;0, the polynomial approximations in this file are much
+faster however.</p>
+<dl class="function">
+<dt id="odysseus.polylog.fermi_poly3">
+<tt class="descclassname">odysseus.polylog.</tt><tt class="descname">fermi_poly3</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#odysseus.polylog.fermi_poly3" title="Permalink to this definition">¶</a></dt>
+<dd>fermi_poly3(x), equal to -Li_3(-e^x)</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.polylog.fermi_poly2">
+<tt class="descclassname">odysseus.polylog.</tt><tt class="descname">fermi_poly2</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#odysseus.polylog.fermi_poly2" title="Permalink to this definition">¶</a></dt>
+<dd>fermi_poly2(x), equal to -Li_2(-e^x)</dd></dl>
+
+</div>
+<div class="section" id="lerch">
+<h2>lerch<a class="headerlink" href="#lerch" title="Permalink to this headline">¶</a></h2>
+<p>Lerch contains a correct implementation of the polylog function <em>Li(s,z)</em> for arbitrary <em>s</em> and <em>z</em>. It is quite slow and therefore not used in Odysseus&#8217; fitting routines, but nevertheless important to check the correctness of the approximate algorithm.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitfuncs.html" title="Fitting functions"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

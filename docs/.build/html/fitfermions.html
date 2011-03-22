@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User interface &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="Generation of reference images" href="refimages.html" />
+    <link rel="prev" title="Theory" href="theory.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="refimages.html" title="Generation of reference images"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="theory.html" title="Theory"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">User interface</a><ul>
+<li><a class="reference external" href="#example-script">Example script</a></li>
+<li><a class="reference external" href="#module-odysseus.fitfermions">The fitfermions module</a></li>
+<li><a class="reference external" href="#sanity-checks">Sanity checks</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="theory.html"
+                                  title="previous chapter">Theory</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="refimages.html"
+                                  title="next chapter">Generation of reference images</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fitfermions.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-interface">
+<h1>User interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h1>
+<p>One of the goals of the development of Odysseus is to create an easy to use software package that fits images in a fast, simple and robust way. To achieve this, there is a single module, <tt class="xref docutils literal"><span class="pre">fitfermions</span></tt>, that contains high-level functions that can be used from user scripts. Most of the heavy lifting is being done by the function <tt class="xref docutils literal"><span class="pre">fitfermions.fit_img()</span></tt>, which takes the path to a single image file, opens it, radially averages the transmission image, constructs the optical density profile, fits the column density for an ideal Fermi gas to it and finally extracts the number of atoms and temperature from the fit. Several example scripts are provided, they can be easily modified - with for example the names of the image files that are of interest - and run interactively.</p>
+<div class="section" id="example-script">
+<h2>Example script<a class="headerlink" href="#example-script" title="Permalink to this headline">¶</a></h2>
+<p>Simply copy this script into a new file, modify and run!</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">os</span>
+<span class="k">from</span> <span class="nn">odysseus.fitfermions</span> <span class="k">import</span> <span class="n">fit_img</span><span class="p">,</span> <span class="n">find_ellipticity</span>
+<span class="k">from</span> <span class="nn">odysseus.imageprocess</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">from</span> <span class="nn">odysseus.imageio</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c">## import a single image ##</span>
+<span class="n">dirname</span> <span class="o">=</span> <span class="s">&#39;../../../archives/2008-09-11/&#39;</span>
+<span class="c">#dirname = &#39;c:\\Data\\2008-05-27&#39;</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="s">&#39;raw9.11.2008 7;35;23 PM.TIF&#39;</span>
+<span class="n">img_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+
+<span class="n">rawframes</span> <span class="o">=</span> <span class="n">import_raw_frames</span><span class="p">(</span><span class="n">img_name</span><span class="p">)</span>
+<span class="n">transimg</span><span class="p">,</span> <span class="n">odimg</span> <span class="o">=</span> <span class="n">calc_absorption_image</span><span class="p">(</span><span class="n">rawframes</span><span class="p">)</span>
+<span class="c"># set the ROI</span>
+<span class="n">transimg</span> <span class="o">=</span> <span class="n">transimg</span><span class="p">[</span><span class="mf">120</span><span class="p">:</span><span class="mf">350</span><span class="p">,</span> <span class="mf">50</span><span class="p">:</span><span class="mf">275</span><span class="p">]</span>
+
+<span class="c"># find the ellipticity if the expansion is not spherically symmetric</span>
+<span class="n">ellip</span> <span class="o">=</span> <span class="n">find_ellipticity</span><span class="p">(</span><span class="n">transimg</span><span class="p">)</span>
+<span class="c"># do the fit</span>
+<span class="n">ToverTF</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">fit_img</span><span class="p">(</span><span class="n">transimg</span><span class="p">,</span> <span class="n">elliptic</span><span class="o">=</span><span class="p">(</span><span class="n">ellip</span><span class="p">,</span> <span class="mf">0</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<p>The above script results in the determined temperature and number of atoms being printed in the console, as well as an image containing the radially averaged transmission image, optical density profile and a fit of that OD profile with the expected one for an ideal Fermi gas, as shown below.</p>
+<a class="reference external image-reference" href="_images/example_fit.png"><img alt="_images/example_fit.png" src="_images/example_fit.png" style="width: 400pt;" /></a>
+</div>
+<div class="section" id="module-odysseus.fitfermions">
+<h2>The fitfermions module<a class="headerlink" href="#module-odysseus.fitfermions" title="Permalink to this headline">¶</a></h2>
+<p>A high level interface to the temperature fit routines for fermions.</p>
+<p>The easiest to use function is fit_img(). When a single transmission image
+is passed in to this function, the fit should just work. Normalization
+is automatically taken care of. It is assumed that the atom cloud is
+azimuthally symmetric around its center of mass. If this is not the case,
+find_ellipticity() should be used to find the aspect ratio of the cloud first.</p>
+<dl class="function">
+<dt id="odysseus.fitfermions.fit_img">
+<tt class="descclassname">odysseus.fitfermions.</tt><tt class="descname">fit_img</tt><big>(</big><em>transimg</em>, <em>odmax=1.0</em>, <em>showfig=True</em>, <em>elliptic=None</em>, <em>pixcal=1.0000000000000001e-05</em>, <em>fitfunc='idealfermi'</em>, <em>T=None</em>, <em>full_output=None</em>, <em>norm=True</em><big>)</big><a class="headerlink" href="#odysseus.fitfermions.fit_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits an absorption image with an ideal Fermi gas profile</p>
+<p>The image is normalized, then azimuthally averaged, then fitted. If the
+input is a list of imaged they are separately normalized and then averaged
+and fitted.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>transimg: 2D array or list of 2D arrays, containing the image data</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>ToverTF: float, the temperature of the Fermi gas in units of T_F</li>
+<li>N: float, the number of atoms of the Fermi gas</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">od_max = float, the maximum optical density that is used in the fit</p>
+</li>
+<li><dl class="first docutils">
+<dt>showfig: boolean, determines if a figure is shown with density profile</dt>
+<dd><p class="first last">and fit</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">elliptic: tuple, containing two elements. the first one is the
+ellipticity (or ratio of major and minor axes), the second one is the
+angle by which the major axis is rotated from the y-axis</p>
+</li>
+<li><p class="first">pixcal: float, pixel size calibration in m/pix.</p>
+</li>
+<li><p class="first">fitfunc: string, name of the fit function to be used. Valid choices are
+idealfermi, gaussian, idealfermi_fixedT</p>
+</li>
+<li><p class="first">T: float, the temperature for idealfermi_fixedT</p>
+</li>
+<li><p class="first">full_output: string, if value is <tt class="docutils literal"><span class="pre">odysseus</span></tt> the correct objects for
+the Odysseus GUI are returned</p>
+</li>
+<li><dl class="first docutils">
+<dt>norm: bool, if False the normalization of the image is turned off.</dt>
+<dd><p class="first last">This is mainly useful if you fit computer-generated images or
+images that you already normalized some other way.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfermions.norm_and_guess">
+<tt class="descclassname">odysseus.fitfermions.</tt><tt class="descname">norm_and_guess</tt><big>(</big><em>transimg</em>, <em>norm=True</em><big>)</big><a class="headerlink" href="#odysseus.fitfermions.norm_and_guess" title="Permalink to this definition">¶</a></dt>
+<dd>Normalize the transmission image and find initial fitting parameters</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfermions.do_fit">
+<tt class="descclassname">odysseus.fitfermions.</tt><tt class="descname">do_fit</tt><big>(</big><em>rcoord</em>, <em>od_prof</em>, <em>od_cutoff</em>, <em>guess</em>, <em>pixcal</em>, <em>fitfunc='idealfermi'</em>, <em>T=None</em><big>)</big><a class="headerlink" href="#odysseus.fitfermions.do_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits an absorption image with an ideal Fermi gas profile</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">rcoord: 1D array containing the radial coordinate</p>
+</li>
+<li><p class="first">od_prof: 1D array containing the radially averaged OD profile</p>
+</li>
+<li><dl class="first docutils">
+<dt>od_cutoff: int, the index of rcoord from where the fit has to be</dt>
+<dd><p class="first last">performed.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">guess: tuple, initial fit parameters, the three elements are n0, a,
+bprime</p>
+</li>
+<li><p class="first">pixcal: float, pixel size calibration in m/pix.</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>ToverTF: float, the temperature of the Fermi gas in units of T_F</li>
+<li>N: float, the number of atoms of the Fermi gas</li>
+<li>ans: tuple, containing the fit result</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>fitfunc: string, name of the fit function to be used. Valid choices are
+idealfermi, gaussian, idealfermi_fixedT</li>
+<li>T: float, the temperature for idealfermi_fixedT</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="sanity-checks">
+<h2>Sanity checks<a class="headerlink" href="#sanity-checks" title="Permalink to this headline">¶</a></h2>
+<p>To make sure that fits make sense, a lot of tests can be done. There is a straightforward way to run many of these tests at once and generate a test report for an image. This comes in the form of a pdf file generated through LaTeX. In the simple example below an image is loaded, the region of interest (ROI) is set and a report generated.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">os</span>
+<span class="k">from</span> <span class="nn">odysseus.imageprocess</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">from</span> <span class="nn">odysseus.imageio</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">from</span> <span class="nn">odysseus</span> <span class="k">import</span> <span class="n">texreport</span>
+
+<span class="n">dirname</span> <span class="o">=</span> <span class="s">&#39;/home/ralf/data/archives/raw_frames/&#39;</span>
+<span class="n">tifname</span> <span class="o">=</span> <span class="s">&#39;raw9.11.2008 7;35;23 PM.TIF&#39;</span>
+<span class="n">imgname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">tifname</span><span class="p">)</span>
+
+<span class="n">rawframes</span> <span class="o">=</span> <span class="n">import_raw_frames</span><span class="p">(</span><span class="n">imgname</span><span class="p">)</span>
+<span class="n">transimg</span><span class="p">,</span> <span class="n">odimg</span> <span class="o">=</span> <span class="n">calc_absorption_image</span><span class="p">(</span><span class="n">rawframes</span><span class="p">)</span>
+<span class="n">transimg</span> <span class="o">=</span> <span class="n">transimg</span><span class="p">[</span><span class="mf">120</span><span class="p">:</span><span class="mf">350</span><span class="p">,</span> <span class="mf">50</span><span class="p">:</span><span class="mf">275</span><span class="p">]</span> <span class="c"># ROI</span>
+<span class="n">texreport</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">rawframes</span><span class="p">,</span> <span class="n">transimg</span><span class="p">,</span> <span class="n">imgname</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The transmission and raw images are shown, the azimuthally averaged image with the best fit is shown, the fit results (T, N) are given, the residuals are displayed, and the ellipticity is checked.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="refimages.html" title="Generation of reference images"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="theory.html" title="Theory"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

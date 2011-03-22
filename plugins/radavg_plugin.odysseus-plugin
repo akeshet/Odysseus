@@ -1,0 +1,9 @@
+[Core]
+Name = Radial average
+Module = radavg_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A simple plugin that shows the radial average of an image around the center of mass.

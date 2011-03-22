@@ -1,0 +1,9 @@
+[Core]
+Name = Line profile
+Module = lineprofile_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A plugin that can generate line profiles. The GUI gives the option to set several parameters.

@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The GUI plugin system &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="Odysseus development" href="development.html" />
+    <link rel="prev" title="Generation of reference images" href="refimages.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Odysseus development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="refimages.html" title="Generation of reference images"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">The GUI plugin system</a><ul>
+<li><a class="reference external" href="#plugin-info-file-format">Plugin info file format</a></li>
+<li><a class="reference external" href="#plugin-python-file">Plugin Python file</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="refimages.html"
+                                  title="previous chapter">Generation of reference images</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="development.html"
+                                  title="next chapter">Odysseus development</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/plugins.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-gui-plugin-system">
+<span id="writing-plugins"></span><h1>The GUI plugin system<a class="headerlink" href="#the-gui-plugin-system" title="Permalink to this headline">¶</a></h1>
+<p>Odysseus contains a very straightforward plugin system that allows users to add
+their own data analysis functionality. Basically, what is needed is a plain text
+file to register the plugin and a python file with the analysis code.
+Users can then right-click on images in the image grid at the bottom of the GUI,
+and select the plugin from a popup list. The image will be passed to the plugin,
+where the results of the data analysis can be easily plotted in a popup window.</p>
+<p>The plugin system is based on <a class="reference external" href="http://yapsy.sourceforge.net/">Yapsy</a>, for the
+details of the design please check the documentation on the Yapsy wesite.</p>
+<div class="section" id="plugin-info-file-format">
+<h2>Plugin info file format<a class="headerlink" href="#plugin-info-file-format" title="Permalink to this headline">¶</a></h2>
+<p>The plugin info file gathers, as its name suggests, some basic
+information about the plugin. On one hand it gives crucial information
+needed to be able to load the plugin. On the other hand it provided
+some documentation like information like the plugin author&#8217;s name and
+a short description fo the plugin functionality. The info file
+should have the extension <cite>.odysseus-plugin</cite>.</p>
+<p>Here is an example of what such a file should contain:</p>
+<div class="highlight-python"><pre>[Core]
+Name = Demo Plugin
+Module = demo_plugin
+
+[Documentation]
+Author = Ralf
+Version = 0.1
+Website = None
+Description = A simple plugin useful for basic testing</pre>
+</div>
+</div>
+<div class="section" id="plugin-python-file">
+<h2>Plugin Python file<a class="headerlink" href="#plugin-python-file" title="Permalink to this headline">¶</a></h2>
+<p>The plugin should have extension <cite>.py</cite> and contain a class that
+is a subclass of DialogPlugin. The
+<cite>main()</cite> method of this class is executed when the plugin is used from the
+GUI. Inside the <cite>main()</cite> function a matplotlib figure and axes instance are
+available as <cite>self.fig</cite> and <cite>self.ax</cite> respectively.</p>
+<p>The following is an example of a basic plugin:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></td><td class="code"><div class="highlight"><pre><span class="k">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">from</span> <span class="nn">plugins</span> <span class="k">import</span> <span class="n">DialogPlugin</span>
+
+<span class="k">class</span> <span class="nc">DemoPlugin</span><span class="p">(</span><span class="n">DialogPlugin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Demonstrates the basics of the plugin system&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the average pixel intensity in each image row&quot;&quot;&quot;</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mf">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The easiest thing to do is to copy the code above and simply change the contents
+of the <cite>main()</cite> function to something more useful.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Odysseus development"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="refimages.html" title="Generation of reference images"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+
+<file alias="icon.png">resources/python-crystal.png</file>
+<file alias="blankimg.png">resources/blankimg.png</file>
+<file alias="splashscreen.png">resources/splashscreen.png</file>
+<file alias="roi_analysis.svg">resources/roi_analysis.svg</file>
+<file alias="roi_ncount.svg">resources/roi_ncount.svg</file>
+<file alias="default_viewlimits.svg">resources/default_viewlimits.svg</file>
+<file alias="five_ninetyfive.svg">resources/five_ninetyfive.svg</file>
+<file alias="viewlimits_popup.svg">resources/viewlimits_popup.svg</file>
+
+</qresource>
+</RCC>

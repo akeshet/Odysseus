@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fitting functions &mdash; Odysseus v0.6.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Odysseus v0.6.0 documentation" href="index.html" />
+    <link rel="next" title="Other modules" href="othermodules.html" />
+    <link rel="prev" title="Image handling" href="imageprocess.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="othermodules.html" title="Other modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imageprocess.html" title="Image handling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="imageprocess.html"
+                                  title="previous chapter">Image handling</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="othermodules.html"
+                                  title="next chapter">Other modules</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/fitfuncs.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-odysseus.fitfuncs">
+<h1>Fitting functions<a class="headerlink" href="#module-odysseus.fitfuncs" title="Permalink to this headline">¶</a></h1>
+<p>The fit functions for density profiles of atom clouds live in the <tt class="xref docutils literal"><span class="pre">fitfuncs</span></tt> module.</p>
+<p>Collection of functions that can be used to fit images of cold atom clouds.</p>
+<p><strong>References</strong></p>
+<p>[1] &#8220;Making, probing and understanding ultracold Fermi gases&#8221;, W. Ketterle and
+M. Zwierlein, arXiv:cond-mat/0801.2500 (2008)</p>
+<p>[2] &#8220;Making, probing and understanding Bose-Einstein condensates:, W. Ketterle,
+D.S. Durfee and D.M. Stamper-Kurn, arXiv:cond-mat/9904034 (1999)</p>
+<dl class="function">
+<dt id="odysseus.fitfuncs.fit1dfunc">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">fit1dfunc</tt><big>(</big><em>func</em>, <em>xdata</em>, <em>ydata</em>, <em>guess</em>, <em>weights=None</em>, <em>params=None</em>, <em>tol=1e-08</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.fit1dfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function to fit 1d data</p>
+<p>Note that if the fitted data has no noise, the fit will sometimes return
+2 or 3 for success, but this usually still means that the fit was successful.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>func: function, the 1D function that has only xdata as an independent</dt>
+<dd><p class="first last">variable</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">xdata: 1D array, the independent variable of func</p>
+</li>
+<li><p class="first">ydata: 1D array, the independent variable of func we&#8217;re fitting</p>
+</li>
+<li><p class="first">guess: sequence, the initial guess for the fit parameters of func</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>ans: sequence, the final fitting parameters</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>weights: 1D array, the weights of the data points</li>
+<li>params: sequence, containing the other input parameters to func</li>
+<li>tol: relative tolerance of the fitting routine</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.fugacity_from_temp">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">fugacity_from_temp</tt><big>(</big><em>ToverTF</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.fugacity_from_temp" title="Permalink to this definition">¶</a></dt>
+<dd>Finds the fugacity from the temperature by a minimization routine</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.gaussian">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">gaussian</tt><big>(</big><em>r</em>, <em>n0</em>, <em>sigma</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>1d radial column density of a gas with Gaussian profile</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>r: 1d array containing the radial coordinate</li>
+<li>n0: float, central optical density</li>
+<li>sigma: float, Gaussian width</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>coldensity: 1d array of the same length as r, containing the column density</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.gaussian_numbers">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">gaussian_numbers</tt><big>(</big><em>fitparams</em>, <em>pixcal</em>, <em>sigma=None</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.gaussian_numbers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine T/T_F and N for an ideal Fermi gas.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>fitparams: list, the result of fitting the image with gaussian().</dt>
+<dd><p class="first last">fitparams is a list containing the central optical density,
+and thermal radius of the cloud in pixels</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">pixcal: calibration for the camera in meters per pixel</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>N: number of atoms</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>sigma: photon absorption cross-section</dt>
+<dd><p class="first last">the default value is the resonant cross-section for 6Li</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.ideal_fermi_numbers">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">ideal_fermi_numbers</tt><big>(</big><em>fitparams</em>, <em>pixcal</em>, <em>sigma=None</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.ideal_fermi_numbers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine T/T_F and N for an ideal Fermi gas.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>fitparams: the result of fitting the image with ideal_fermi_radial</dt>
+<dd><p class="first last">fitparams is a list containing the central optical density,
+logarithm of the fugacity and thermal radius of the cloud in
+pixels</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">pixcal: calibration for the camera in meters per pixel</p>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>ToverTF: temperature of the Fermi gas T/T_F</li>
+<li>N: number of atoms</li>
+</ul>
+</blockquote>
+<p><strong>Optional inputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>sigma: photon absorption cross-section</dt>
+<dd><p class="first last">the default value is the resonant cross-section for 6Li</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.ideal_fermi_radial">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">ideal_fermi_radial</tt><big>(</big><em>r</em>, <em>n0</em>, <em>q</em>, <em>r_cloud</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.ideal_fermi_radial" title="Permalink to this definition">¶</a></dt>
+<dd><p>1D radial column density of an ideal Fermi gas</p>
+<p>The radial column density of an ideal Fermi gas around its center of mass.
+This is usually obtained by radially averaging an image of the atom cloud
+after time of flight from a trap with equal trap frequencies along both
+image axes.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">r: 1D array containing the radial coordinate</p>
+</li>
+<li><p class="first">n0: central optical density</p>
+</li>
+<li><p class="first">q: logarithm of the fugacity, q = mu*beta</p>
+</li>
+<li><dl class="first docutils">
+<dt>r_cloud: the radius of the atom cloud after expansion, in pixels.</dt>
+<dd><p class="first last">for low temperatures T/T_F &lt;&lt; 1, this is equal to the
+Fermi radius times the expansion factor, for high T/T_F
+to the thermal radius times the expansion factor.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>coldensity: 1D array of the same length as r, containing the column</dt>
+<dd><p class="first last">density for the ideal Fermi gas</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>References</strong></p>
+<p>[1] Ketterle and Zwierlein, p.69, eq.65</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odysseus.fitfuncs.n2D_radial">
+<tt class="descclassname">odysseus.fitfuncs.</tt><tt class="descname">n2D_radial</tt><big>(</big><em>r</em>, <em>oneDfunc</em>, <em>oneDparams</em><big>)</big><a class="headerlink" href="#odysseus.fitfuncs.n2D_radial" title="Permalink to this definition">¶</a></dt>
+<dd><p>2D density distribution used for determining the number of atoms.</p>
+<p>This is a convenience function that takes a 1D function that depends on
+radius, and multiplies it by 2*pi*r so it can be integrated over in 2D.</p>
+<p><strong>Inputs</strong></p>
+<blockquote>
+<ul>
+<li><p class="first">r: radial coordinate, this is the independent variable of oneDfunc</p>
+</li>
+<li><p class="first">oneDfunc: function, the 1D function that depends only on r</p>
+</li>
+<li><dl class="first docutils">
+<dt>oneDparams: sequence, a list or tuple containing the other input</dt>
+<dd><p class="first last">parameters to oneDfunc</p>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+<p><strong>Outputs</strong></p>
+<blockquote>
+<ul class="simple">
+<li>twoDfunc: oneDfunc times 2*pi*r</li>
+</ul>
+</blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="othermodules.html" title="Other modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imageprocess.html" title="Image handling"
+             >previous</a> |</li>
+        <li><a href="index.html">Odysseus v0.6.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008-2009, Ralf Gommers.
+      Last updated on Sep 16, 2009.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

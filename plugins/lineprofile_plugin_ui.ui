@@ -1,0 +1,345 @@
+<ui version="4.0" >
+ <class>LineProfile</class>
+ <widget class="QDialog" name="LineProfile" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>728</width>
+    <height>687</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Line profile</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3" >
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" name="verticalLayout_2" >
+     <item>
+      <widget class="BlankCanvasWithToolbar" native="1" name="imgView" >
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>200</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="NavigationToolbar2QT" native="1" name="toolbar" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>150</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QPushButton" name="computeProfile" >
+     <property name="minimumSize" >
+      <size>
+       <width>151</width>
+       <height>41</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string>Compute profile</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="0" column="2" >
+    <layout class="QVBoxLayout" name="verticalLayout" >
+     <item>
+      <widget class="QGroupBox" name="groupBox_2" >
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>111</height>
+        </size>
+       </property>
+       <property name="title" >
+        <string>Center point</string>
+       </property>
+       <widget class="QPushButton" name="setCoM" >
+        <property name="geometry" >
+         <rect>
+          <x>11</x>
+          <y>48</y>
+          <width>100</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="text" >
+         <string>Set to CoM</string>
+        </property>
+       </widget>
+       <widget class="QWidget" name="" >
+        <property name="geometry" >
+         <rect>
+          <x>116</x>
+          <y>30</y>
+          <width>79</width>
+          <height>60</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2" >
+         <item row="0" column="0" >
+          <widget class="QLabel" name="ylabel" >
+           <property name="text" >
+            <string>X</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QSpinBox" name="center_y" >
+           <property name="maximum" >
+            <number>5000</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="xlabel" >
+           <property name="text" >
+            <string>Y</string>
+           </property>
+           <property name="buddy" >
+            <cstring>center_x</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QSpinBox" name="center_x" >
+           <property name="maximum" >
+            <number>5000</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_3" >
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>141</height>
+        </size>
+       </property>
+       <property name="title" >
+        <string>Angles</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget" >
+        <property name="geometry" >
+         <rect>
+          <x>11</x>
+          <y>30</y>
+          <width>182</width>
+          <height>113</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" >
+         <item>
+          <widget class="QPushButton" name="setAngles" >
+           <property name="text" >
+            <string>Set to defaults</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="anglesList" >
+           <property name="minimumSize" >
+            <size>
+             <width>51</width>
+             <height>111</height>
+            </size>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>51</width>
+             <height>111</height>
+            </size>
+           </property>
+           <property name="html" >
+            <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">0&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">45&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">90&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">135&lt;/p>&lt;/body>&lt;/html></string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="title" >
+        <string>Smooth</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget" >
+        <property name="geometry" >
+         <rect>
+          <x>20</x>
+          <y>31</y>
+          <width>159</width>
+          <height>59</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout" >
+         <item row="0" column="0" >
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Type</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2" >
+          <widget class="QComboBox" name="smoothType" >
+           <item>
+            <property name="text" >
+             <string>Hanning</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Hamming</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Blackman</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Bartlett</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>flat</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2" >
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>Window length</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" >
+          <widget class="QSpinBox" name="smoothWindowlength" >
+           <property name="layoutDirection" >
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="value" >
+            <number>10</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_4" >
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>80</height>
+        </size>
+       </property>
+       <property name="title" >
+        <string>Line width (averaging)</string>
+       </property>
+       <widget class="QSpinBox" name="linewidth" >
+        <property name="geometry" >
+         <rect>
+          <x>70</x>
+          <y>30</y>
+          <width>62</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="maximum" >
+         <number>200</number>
+        </property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <layout class="QVBoxLayout" name="verticalLayout_3" >
+     <item>
+      <widget class="BlankCanvasWithToolbar" native="1" name="lineprofileView" >
+       <property name="minimumSize" >
+        <size>
+         <width>477</width>
+         <height>413</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="NavigationToolbar2QT" native="1" name="toolbar_2" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>150</width>
+         <height>25</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BlankCanvasWithToolbar</class>
+   <extends>QWidget</extends>
+   <header>mplwidgets.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NavigationToolbar2QT</class>
+   <extends>QWidget</extends>
+   <header>matplotlib.backends.backend_qt4agg.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
